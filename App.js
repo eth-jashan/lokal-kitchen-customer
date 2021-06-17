@@ -4,6 +4,16 @@ import { StyleSheet, Text, View } from 'react-native';
 import AppNav from './navigatior/AppNav';
 import * as Font from 'expo-font'
 import AppLoading from "expo-app-loading"
+import {Provider} from 'react-redux'
+import AuthHandler from './store/reducer/auth'
+import {applyMiddleware, createStore, combineReducers} from 'redux'
+import ReduxThunk from 'redux-thunk'
+
+const reducers=combineReducers({
+  auth:AuthHandler
+})
+
+const store=createStore(reducers,applyMiddleware(ReduxThunk))
 
 const fontLoading = () =>{ 
   return Font.loadAsync({
@@ -28,7 +38,9 @@ export default function App() {
         /> 
       }
   return (
-    <AppNav/>
+    <Provider store={store} >
+      <AppNav/>
+    </Provider>
   );
 }
 
