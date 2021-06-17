@@ -35,7 +35,7 @@ const LoginScreen=props=>{
             const userId=response.user.uid
             console.log(userId,token)
             await dispatch(createAccount(userId,token))
-            props.navigation.navigate('Main')
+            props.navigation.navigate('MapStartup')
           } catch (err) {
             Alert.alert('Error','Invalid Code',[{text:'Okay'}])
           }
