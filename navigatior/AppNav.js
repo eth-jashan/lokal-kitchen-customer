@@ -5,6 +5,7 @@ import StartupScreen from '../source/screen/StartupScreen';
 import LoginScreen from '../source/screen/LoginScreen';
 import HomeScreen from '../source/screen/HomeScreen';
 import MapStartupScreen from '../source/screen/MapStartupScreen';
+import ProfileScreen from '../source/screen/ProfileScreen';
 
 const AuthStack=createStackNavigator()
 
@@ -32,7 +33,7 @@ const AppNav=()=>{
     return(
         <NavigationContainer>
             <AppFlow.Navigator screenOptions={{headerShown:false}} >
-            {/* <AppFlow.Screen name='Auth' component={MyAuth} /> */}
+            <AppFlow.Screen name='Auth' component={MyAuth} />
             <AppFlow.Screen name='Main' component={MainApp} />
             </AppFlow.Navigator>
         </NavigationContainer>

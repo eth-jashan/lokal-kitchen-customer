@@ -5,9 +5,8 @@ import {Ionicons} from '@expo/vector-icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HomeHeader from '../component/HomeHeader'
 import OfferCarousel from '../component/OfferCarousel'
-import TypeCarousel from '../component/TypeCarousel'
 
-const HomeScreen=({navigation})=>{
+const ProfileScreen=({navigation})=>{
     return(
         <SafeAreaView style={{flex:1}} >
         <HomeHeader/>
@@ -18,11 +17,10 @@ const HomeScreen=({navigation})=>{
         </View>
 
         <OfferCarousel/>
-        <TypeCarousel/>
         
 
         </SafeAreaView>
     )
 }
 
-export default HomeScreen
+export default ProfileScreen
