@@ -6,6 +6,7 @@ import LoginScreen from '../source/screen/LoginScreen';
 import HomeScreen from '../source/screen/HomeScreen';
 import MapStartupScreen from '../source/screen/MapStartupScreen';
 import ProfileScreen from '../source/screen/ProfileScreen';
+import ProfileCreation from '../source/screen/ProfileCreation';
 
 const AuthStack=createStackNavigator()
 
@@ -14,6 +15,7 @@ const MyAuth=()=>{
         <AuthStack.Navigator initialRouteName='Welcome' screenOptions={{headerShown:false}} >
             <AuthStack.Screen name='Welcome' component={StartupScreen} />
             <AuthStack.Screen name='Login' component={LoginScreen} />
+            <AuthStack.Screen name='Profile' component={ProfileCreation} />
         </AuthStack.Navigator>
     )
 }

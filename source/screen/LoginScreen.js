@@ -35,7 +35,7 @@ const LoginScreen=props=>{
             const userId=response.user.uid
             console.log(userId,token)
             await dispatch(createAccount(userId,token))
-            props.navigation.navigate('Main')
+            props.navigation.navigate('Profile')
           } catch (err) {
             Alert.alert('Error','Invalid Code',[{text:'Okay'}])
           }
@@ -48,7 +48,7 @@ const LoginScreen=props=>{
             <View style={{marginTop:50,flexDirection:'row',justifyContent:'space-between',alignSelf:'center',width:'100%'}} >
             <View style={{marginLeft:15,marginTop:10}} >
             <Text style={{fontFamily:'logo',fontSize:18}} >Welcome!</Text>
-            <Text style={{fontFamily:'book',fontSize:18}}>Sign In To Continue</Text>
+            <Text style={{fontFamily:'book',fontSize:18}}>Sign Up To Continue</Text>
             </View>
             <View style={{marginRight:15,marginTop:10}}  >
             <Ionicons size={50} name='fast-food-outline' />
@@ -81,7 +81,9 @@ const LoginScreen=props=>{
             </View>
             </View>
             </View>
-            :<View style={{flexDirection:'row',margin:10,marginTop:50,borderRadius:20,backgroundColor:'#ededee'}} >
+            :<View>
+            <Text style={{fontFamily:'book',fontSize:18,marginTop:40,marginLeft:15}} >Signup with Phone Number</Text>
+            <View style={{flexDirection:'row',margin:10,borderRadius:20,backgroundColor:'#ededee'}} >
             <View style={{marginTop:20,margin:5}} >
             <Ionicons name='phone-portrait-outline' size={30} />
             </View>
@@ -100,6 +102,24 @@ const LoginScreen=props=>{
                 </Pressable>
             </View>
             
+            </View>
+            <View style={{marginTop:15}} >
+            <View style={{justifyContent:'center',alignItems:'center'}} >
+                <Text style={{fontFamily:'logo',fontSize:20}} >OR</Text>
+            </View>
+                <Pressable onPress={()=>{props.navigation.navigate('Profile')}} style={{width:Dimensions.get('screen').width*0.95,margin:10,borderWidth:3,borderRadius:20,borderColor:'#DB4437',height:50,justifyContent:'center',alignItems:'center'}} >
+                    <View style={{flexDirection:'row'}} >
+                        <View style={{marginRight:5}} ><Ionicons name='logo-google' size={25} color='#DB4437' /></View>
+                        <Text style={{fontFamily:'book',fontSize:16}} >Signup with Google</Text>
+                    </View>
+                </Pressable>
+                <Pressable onPress={()=>{props.navigation.navigate('Profile')}} style={{width:Dimensions.get('screen').width*0.95,margin:10,borderWidth:3,borderRadius:20,borderColor:'#4267B2',height:50,justifyContent:'center',alignItems:'center'}} >
+                    <View style={{flexDirection:'row'}} >
+                        <View style={{marginRight:5}} ><Ionicons name='logo-facebook' size={25} color='#4267B2' /></View>
+                        <Text style={{fontFamily:'book',fontSize:16}} >Signup with Facebook</Text>
+                    </View>
+                </Pressable>
+            </View>    
             </View>}
             
         </View>
