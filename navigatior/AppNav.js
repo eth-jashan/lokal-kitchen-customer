@@ -16,6 +16,7 @@ const MyAuth=()=>{
             <AuthStack.Screen name='Welcome' component={StartupScreen} />
             <AuthStack.Screen name='Login' component={LoginScreen} />
             <AuthStack.Screen name='Profile' component={ProfileCreation} />
+            <AuthStack.Screen name= 'Map' component = {MapStartupScreen} />
         </AuthStack.Navigator>
     )
 }
@@ -23,8 +24,7 @@ const MyAuth=()=>{
 const MainStack=createStackNavigator()
 const MainApp=()=>{
     return(
-        <MainStack.Navigator initialRouteName='MapStartup' screenOptions={{headerShown:false}} >
-            <MainStack.Screen name = 'MapStartup' component={MapStartupScreen}/>
+        <MainStack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}} >
             <MainStack.Screen name='Home' component={HomeScreen}  />
         </MainStack.Navigator>
     )

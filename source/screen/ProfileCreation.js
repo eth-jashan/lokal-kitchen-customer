@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
-import {View,Text, Dimensions,FlatList, ScrollView,TextInput,Pressable} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import {View,Text, Dimensions,FlatList, ScrollView,TextInput,Pressable,Alert} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SetAvatar from '../components/SetAvatar'
 
 const ProfileCreation=props=>{
-    const[name,setName]=useState()
-    const[number,setNumber]=useState()
-    const[email,setEmail]=useState()
+    const{type,pNumber} =  props.route.params;
+    const[done,setDone] = useState(false);
+
+    const[name,setName]=useState('')
+    const[number,setNumber]=useState('')
+    const[email,setEmail]=useState('')
     const[avatar,setAvatar]=useState()
     const avatarList=['https://firebasestorage.googleapis.com/v0/b/mineral-concord-314020.appspot.com/o/burgerAvatar.jpg?alt=media&token=5c0db996-cacb-4525-b448-76d8beca6506',
     'https://firebasestorage.googleapis.com/v0/b/mineral-concord-314020.appspot.com/o/icecreamAvatar.jpg?alt=media&token=56989787-d4e9-4874-af52-c331814df3fa',
@@ -17,6 +20,21 @@ const ProfileCreation=props=>{
     const getAvatar=(uri)=>{
         setAvatar(uri)
     }
+
+    useEffect(()=>{
+        if(type === 'Phone')
+        setNumber(pNumber)
+    },[done])
+
+    const checkCredentials = () => {
+        if(name.trim().length > 0 && number.trim().length > 0 && avatar){
+            props.navigation.navigate('Map',{phoneNumber:number,email:email,name:name,avatar:avatar,method:'SignUp'})
+        }
+        else{
+            Alert.alert('Invalid Form Data','Please Enter all The required Data',[{text:'Okay'}])
+        }
+    }
+
     return(
         <SafeAreaView style={{flex:1,opacity:0.9}} >
         <View style={{marginTop:30,margin:10}} >
@@ -62,12 +80,13 @@ const ProfileCreation=props=>{
         <TextInput
             value={email}
             onChangeText={setEmail}
-            placeholder='Email-Id'
+            placeholder='Email-Id(Optional)'
             style={{ fontFamily: 'medium',padding:10,fontSize:14,borderRadius:20,backgroundColor:'#ededee', height: 60, width: Dimensions.get('screen').width*0.95, alignSelf:'center' }}
         />
         </View>
         
-        <Pressable onPress={()=>{props.navigation.navigate('Main')}} style={{borderRadius:10,width:Dimensions.get('screen').width*0.95,margin:10,justifyContent:'center',alignItems:'center',height:50,backgroundColor:'#08818a'}} >
+        <Pressable onPress={()=>{checkCredentials()}}
+            style={{borderRadius:10,width:Dimensions.get('screen').width*0.95,margin:10,justifyContent:'center',alignItems:'center',height:50,backgroundColor:'#08818a'}} >
             <Text style={{fontFamily:'book',color:'white',fontSize:14}} >Submit</Text>
         </Pressable>
         </ScrollView>

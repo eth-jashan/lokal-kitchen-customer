@@ -23,3 +23,4 @@ export const fetchProfile = () => {
         dispatch({type:FETCH_PROFILE,pData:profiles})
     }
 }
+

@@ -5,7 +5,7 @@ import AppNav from './navigatior/AppNav';
 import * as Font from 'expo-font'
 import AppLoading from "expo-app-loading"
 import {Provider} from 'react-redux'
-import AuthHandler from './store/reducer/auth'
+import authReducer from './store/reducer/auth';
 import {applyMiddleware, createStore, combineReducers} from 'redux'
 import ReduxThunk from 'redux-thunk'
 import categoryHandler from './store/reducer/category';
@@ -13,7 +13,7 @@ import dishHandler from './store/reducer/dish';
 import profileHandler from './store/reducer/profiles';
 
 const reducers=combineReducers({
-  auth:AuthHandler,
+  auth:authReducer,
   category:categoryHandler,
   dish:dishHandler,
   profile:profileHandler

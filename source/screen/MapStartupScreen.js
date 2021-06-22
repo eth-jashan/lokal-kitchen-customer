@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import {View,Text,StyleSheet,Dimensions,TouchableOpacity, SafeAreaView} from 'react-native';
 import * as Location from 'expo-location';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
+import { useDispatch } from 'react-redux';
 
 //icons
 import { Feather } from '@expo/vector-icons'; 
+
+//actions
+import * as authActions from '../../store/action/auth';
 
 import {
     BallIndicator,
@@ -22,12 +26,24 @@ import {
 //api
 import GoogleLocationApi from '../api/GoogleLocationApi';
 
+
 const{width, height} = Dimensions.get('window')
 
 const MapStartupScreen = (props) => {
+    const{phoneNumber,email,name,avatar,method} =  props.route.params;
+    console.log(phoneNumber)
+
     const [location, setLocation] = useState(null);
     const[address,setAddress] = useState();
     const[foundLocation,setFoundLocation] = useState(false);
+
+    const[number,setNumber] = useState('');
+    const[emailId,setEmailId] = useState('');
+    const[customerName,setCustomerName] = useState('');
+    const[profilePic,setProfilePic] = useState('');
+    const[Method,setMethod] = useState('');
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         (async () => {
@@ -43,6 +59,11 @@ const MapStartupScreen = (props) => {
 
     useEffect(()=>{
         startMap();
+        setNumber(phoneNumber);
+        setEmailId(email);
+        setCustomerName(name);
+        setProfilePic(avatar);
+        setMethod(method);
     },[foundLocation])
 
     const startMap = async() => {
@@ -72,6 +93,18 @@ const MapStartupScreen = (props) => {
         }
         catch(e){
             console.log('error!', e)
+        }
+    }
+
+    const proceed = async() => {
+        if(Method === 'SignUp')
+        {
+            
+            await dispatch(authActions.signUp(number,emailId,customerName,profilePic,location,address,'true'))
+            props.navigation.navigate('Main')
+        }
+        else{
+            //dispatch login
         }
     }
 
@@ -107,7 +140,7 @@ const MapStartupScreen = (props) => {
                    
                     </View>:null}
                     <Text style={{fontSize:13,fontFamily:'book'}}>{address}</Text>
-                    {location?<TouchableOpacity  style={styles.button}  onPress={()=>{props.navigation.navigate('Home')}}>
+                    {location?<TouchableOpacity  style={styles.button}  onPress={()=>{proceed()}}>
                         <Text style={{fontFamily:'book',fontSize:15,color:'#08818a',textAlign:'center'}} >Proceed</Text>
                     
                      </TouchableOpacity>:null}

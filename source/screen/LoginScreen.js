@@ -14,16 +14,27 @@ const LoginScreen=props=>{
     const[code,setCode]=useState()
     const[verificationId,setVerificationId]=useState()
     const recaptchaVerifier = useRef(null);
+    const[error,setError] = useState();
+   
     const dispatch=useDispatch()
+    
     const onSubmit = async() => {
-        const newNum = '+91'+number
-        console.log(newNum)
-        const phoneProvider = new firebase.auth.PhoneAuthProvider();
-        const verId=await phoneProvider.verifyPhoneNumber(newNum,recaptchaVerifier.current)
-        setVerificationId(verId)
-        setConfirm(true)
+        try{
+            const newNum = '+91'+number
+            console.log(newNum)
+            const phoneProvider = new firebase.auth.PhoneAuthProvider();
+            const verId=await phoneProvider.verifyPhoneNumber(newNum,recaptchaVerifier.current)
+            setVerificationId(verId)
+            setConfirm(true)
+            setNumber(newNum);
+        }
+        catch(err){
+            setError(err.message)
+            Alert.alert('An Error Occured',error,[{text:'Okay'}])
 
+        }
     }
+
     const CreateAccount = async() => {
         try {
             const credential = firebase.auth.PhoneAuthProvider.credential(
@@ -35,7 +46,7 @@ const LoginScreen=props=>{
             const userId=response.user.uid
             console.log(userId,token)
             await dispatch(createAccount(userId,token))
-            props.navigation.navigate('Profile')
+            props.navigation.navigate('Profile',{type:'Phone',pNumber:number})
           } catch (err) {
             Alert.alert('Error','Invalid Code',[{text:'Okay'}])
           }
