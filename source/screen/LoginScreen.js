@@ -1,4 +1,4 @@
-import React, { useState,useRef } from 'react'
+import React, { useState,useRef, useEffect } from 'react'
 import { View,Text,Dimensions,Pressable,TextInput  } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {Ionicons} from '@expo/vector-icons'
@@ -8,6 +8,8 @@ import { createAccount } from '../../store/action/auth';
 import { useDispatch } from 'react-redux';
 import { Alert } from 'react-native';
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+
+
 const LoginScreen=props=>{
     const[number,setNumber]=useState()
     const[confirm,setConfirm]=useState(false)
@@ -17,6 +19,22 @@ const LoginScreen=props=>{
     const[error,setError] = useState();
    
     const dispatch=useDispatch()
+
+    // useEffect(() => {
+    //     googleLogin()
+    // },[])
+
+    // const googleLogin = () => {
+    //      firebase.auth().onAuthStateChanged(user => {
+    //         if(user){
+    //             props.navigation.navigate('Map',{method:'Login'})
+    //         }
+    //         else{
+    //             props.navigation.navigate('Profile',{type:'Google',pNumber:''})
+    //         }
+    //     })
+
+    // }
     
     const onSubmit = async() => {
         try{
