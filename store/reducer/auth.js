@@ -1,16 +1,17 @@
 import Customer from "../../model/Customer"
-import { CREATE, SIGN_UP} from "../action/auth"
+import { CREATE, FETCH_CUSTOMER, SIGN_UP} from "../action/auth"
 
 const initialState={
     user:[],
     userId:null,
-    tokenId:null
+    tokenId:null,
 }
 
 export default (state=initialState,action)=>{
     switch(action.type){
         case CREATE:
             return{
+                ...state,
                 userId:action.userid,
                 tokenId:action.tokenid
             }
@@ -26,9 +27,15 @@ export default (state=initialState,action)=>{
                 action.userCredentials.uid, 
                 action.userCredentials.created
             )
-            return{...state,
-                user:state.user.concat(newCustomer)};
-
+            return{
+                ...state,
+                user:state.user.concat(newCustomer)
+            };
+        case FETCH_CUSTOMER:
+            return{
+                ...state,
+                user:action.data.filter(x=>x.uid==action.uid)
+            }
         default:
             return state;
     }
