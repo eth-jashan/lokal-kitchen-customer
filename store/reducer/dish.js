@@ -5,7 +5,7 @@ const initialState = {
 
 }
 
-export default(state=initialState,action) => {
+export default dishHandler=(state=initialState,action) => {
     switch(action.type){
         case FETCH_DISH:
             return{

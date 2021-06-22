@@ -16,7 +16,7 @@ const HomeScreen=({navigation})=>{
         <ScrollView showsVerticalScrollIndicator={false} style={{flex:1}}>
         <View style={{padding:10}}>
         <Text style={{fontFamily:'light', fontSize:30}}>Welcome</Text>
-        <Text style={{fontFamily:'book', fontSize:45}}>Jashan Shetty</Text>
+        <Text style={{fontFamily:'book', fontSize:35}}>Jashan Shetty</Text>
         </View>
 
         <OfferCarousel/>

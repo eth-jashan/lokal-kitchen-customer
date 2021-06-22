@@ -4,7 +4,7 @@ const initialState={
     category:[]
 }
 
-export default(state = initialState,action)=>{
+export default categoryHandler=(state = initialState,action)=>{
     switch(action.type){
         case FETCH_CATEGORY:
             return{

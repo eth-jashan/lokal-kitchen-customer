@@ -3,10 +3,10 @@ import Dish from "../../model/Dish";
 export const FETCH_DISH = 'FETCH_DISH';
 
 
-export const fetchDish=(uid)=>{
+export const fetchDish=()=>{
     return async (dispatch,getState)=>{
 
-        const response=await fetch(`https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/chef/${uid}/Dish.json?`)
+        const response=await fetch(`https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/chef/Dish.json?`)
         const resData=await response.json()
         const list=[]
         for(const key in resData){
@@ -20,9 +20,10 @@ export const fetchDish=(uid)=>{
                 resData[key].noServe,
                 resData[key].quantity,
                 resData[key].categoryid,
-                resData[key].categoryname))
+                resData[key].categoryname,
+                resData[key].uid))
         }
         //console.log(resData);
-        dispatch({type:FETCHDISH,data:list})
+        dispatch({type:FETCH_DISH,data:list})
     }
 }

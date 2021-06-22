@@ -11,7 +11,7 @@ const HomeHeader = ({}) => {
         
         <View style={{width:'70%',alignSelf:'center'}}>
         <View style={{flexDirection:'row'}}>
-        <EvilIcons name="location" size={24} color="#0a789f" />
+        <View style={{margin:4}} ><EvilIcons name="location" size={30} color="#0a789f" /></View>
         <Text style={{fontFamily:'black',fontSize:20 }}>Home</Text>
         </View>
         <Text numberOfLines={1} style={{fontFamily:'light'}}> Krishna Changa Naik Marg Seawoods West, Sector 44A, Seawoods Navi Mumbai, Maharashtra 400706</Text>

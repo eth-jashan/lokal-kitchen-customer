@@ -8,9 +8,15 @@ import {Provider} from 'react-redux'
 import AuthHandler from './store/reducer/auth'
 import {applyMiddleware, createStore, combineReducers} from 'redux'
 import ReduxThunk from 'redux-thunk'
+import categoryHandler from './store/reducer/category';
+import dishHandler from './store/reducer/dish';
+import profileHandler from './store/reducer/profiles';
 
 const reducers=combineReducers({
-  auth:AuthHandler
+  auth:AuthHandler,
+  category:categoryHandler,
+  dish:dishHandler,
+  profile:profileHandler
 })
 
 const store=createStore(reducers,applyMiddleware(ReduxThunk))
