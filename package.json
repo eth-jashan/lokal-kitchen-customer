@@ -26,6 +26,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-elements-universe": "^0.0.0",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-google-places-autocomplete": "^2.2.0",
     "react-native-indicators": "^0.17.0",
     "react-native-maps": "^0.28.0",
     "react-native-paper": "^4.9.1",
