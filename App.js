@@ -11,12 +11,14 @@ import ReduxThunk from 'redux-thunk'
 import categoryHandler from './store/reducer/category';
 import dishHandler from './store/reducer/dish';
 import profileHandler from './store/reducer/profiles';
+import cartHandler  from './store/reducer/cart'
 
 const reducers=combineReducers({
   auth:authReducer,
   category:categoryHandler,
   dish:dishHandler,
-  profile:profileHandler
+  profile:profileHandler,
+  cart:cartHandler
 })
 
 const store=createStore(reducers,applyMiddleware(ReduxThunk))

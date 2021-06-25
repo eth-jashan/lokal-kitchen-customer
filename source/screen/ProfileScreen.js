@@ -16,7 +16,7 @@ const ProfileScreen=({navigation})=>{
         <Text style={{fontFamily:'book', fontSize:45}}>Jashan Shetty</Text>
         </View>
 
-        <OfferCarousel/>
+        
         
 
         </SafeAreaView>

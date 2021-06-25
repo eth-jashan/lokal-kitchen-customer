@@ -10,16 +10,27 @@ import DishList from '../component/dishlist'
 import ChefList from '../component/cheflist'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCustomer } from '../../store/action/auth'
+import { fetchProfile } from '../../store/action/profile'
+import { fetchDish } from '../../store/action/dish'
 
 const HomeScreen=({navigation})=>{
-    const customer=useSelector(x=>x.auth.user)
+
     const dispatch=useDispatch()
+
+    const customer=useSelector(x=>x.auth.user)
+    const profile=useSelector(x=>x.profile.profile)
+        
+    const startupCalls = async() => {
+
+        await dispatch(fetchProfile())
+        await dispatch(fetchDish())
+
+    }
+
     useEffect(()=>{
-        const fetch=async()=>{
-            await dispatch(fetchCustomer())
-        }
-        fetch()
+        startupCalls()
     },[dispatch])
+
     return(
         <SafeAreaView style={{flex:1}} >
         <HomeHeader/>
@@ -31,7 +42,9 @@ const HomeScreen=({navigation})=>{
 
         <OfferCarousel/>
         <TypeCarousel/>
-        <ChefList/>
+        <ChefList
+            list={profile}
+        />
         <DishList/>
         
         </ScrollView>

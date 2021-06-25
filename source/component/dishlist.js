@@ -4,6 +4,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDish } from '../../store/action/dish';
 import { fetchProfile } from '../../store/action/profile';
+import AddButton from './AddButton';
+import {getDistance, getPreciseDistance} from 'geolib';
 
 const {width, height} = Dimensions.get('window')
 
@@ -18,6 +20,20 @@ const DishList = () => {
         }
         fetch()
     },[dispatch])
+    const calculateDistance = (lat, long) => {
+        var dis = getDistance(
+          {latitude: 19.049370, longitude: 73.020462},
+          {latitude: lat, longitude: long},
+        );
+        const kmDis = dis/1000
+        return kmDis 
+    }
+
+
+    const cuisineList= [
+
+        {title:'Breakfast 🍳'},{title:"Appetizer 🍤"}, {title:"Maincourse 🍲"}, {title:'Thali/Meal 🍱'},{title:'Desert 🍨'}]
+
     return(
         <View style={{marginVertical:16}}>
             <View style={{padding:8, marginBottom:12}}>
@@ -30,6 +46,9 @@ const DishList = () => {
                 data={dish}
                 keyExtractor = {x=>x.id}
                 renderItem={({item}) =>{
+                    
+                    const distace = calculateDistance(item.lat, item.long)
+                    console.log("dish", distace)
                     return(
                     <View style={{marginVertical:8, alignSelf:'center'}}>
                         <View style={{width:width*0.9, height:width*0.9/2, alignSelf:'center'}}>
@@ -53,8 +72,11 @@ const DishList = () => {
                                 </View>
                                 </View>
                             </View>
-
+                            
+                            <View>
                             <AntDesign style={{alignSelf:'center'}} name="heart" size={24} color="red" />
+                            <Text style={{fontFamily:'book', fontSize:16}}>{parseInt(distace)} kms away</Text>
+                            </View>
 
                         </View>
                     
@@ -74,29 +96,22 @@ const DishList = () => {
                     <Text style={{fontFamily:'book', fontSize:18, color:'white', textAlign:'center',}}>{item.spicy.title}</Text>
                     </TouchableOpacity>
 
-                    <FlatList
-                        data={item.cuisine}
-                        renderItem={(itemData)=>{
-                            return(
-                                <TouchableOpacity style={{backgroundColor:'#08818a',padding:8, borderRadius:8, marginVertical:6,marginHorizontal:2, height:38}}>
-                                    <Text style={{fontFamily:'book', fontSize:18, color:'white', textAlign:'center'}}>{itemData.item}</Text>
-                                </TouchableOpacity>
-                            )
-                        }}
-                    />
-
+                    <TouchableOpacity style={{backgroundColor:'#08818a',padding:8, borderRadius:8, marginVertical:6,marginHorizontal:2, height:38}}>
+                        <Text style={{fontFamily:'book', fontSize:18, color:'white', textAlign:'center'}}>{cuisineList[2].title}</Text>
+                    </TouchableOpacity>
+                    
                     <TouchableOpacity style={{backgroundColor:'#08818a',  padding:8, borderRadius:8, margin:6, height:38}}>
                     <Text style={{fontFamily:'book', fontSize:18, color:'white', textAlign:'center'}}>serves {item.noServe} 🧑‍🤝‍🧑</Text>
                     </TouchableOpacity>                  
                     
                     </ScrollView>
                     </View>
-                    <View style={{width:width*0.9, flexDirection:'row', justifyContent:'space-between'}}>
+                    <View style={{width:width*0.9, flexDirection:'row', justifyContent:'space-between', marginVertical:6}}>
                         <Text style={{fontFamily:'medium', fontSize:20, alignSelf:'center'}}>₹ {item.price}</Text>
 
-                        <TouchableOpacity style={{padding:8, borderRadius:6, borderColor:'#08818a', borderWidth:1, width:"40%"}}>
-                            <Text style={{fontSize:20, color:'#08818a', alignSelf:'center'}}>Add +</Text>
-                        </TouchableOpacity>
+                        <AddButton
+                            item={item}
+                        />
 
                     </View>
                     </View>)

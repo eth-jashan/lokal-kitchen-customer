@@ -1,5 +1,5 @@
 export default class Dish{
-    constructor(id,name,description,imguri,spicy,cuisine,price,noServe,quantity,categoryId,categoryName,uid){
+    constructor(id,name,description,imguri,spicy,cuisine,price,noServe,quantity,categoryId,categoryName,uid, lat, long){
         this.id=id
         this.name=name
         this.description=description
@@ -12,6 +12,8 @@ export default class Dish{
         this.categoryId=categoryId
         this.categoryName=categoryName
         this.uid = uid;
+        this.lat = lat,
+        this.long = long
     }
 }
 
