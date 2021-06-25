@@ -25,13 +25,13 @@ const HomeHeader = ({}) => {
         <View style={{margin:4}} ><EvilIcons name="location" size={30} color="#0a789f" /></View>
         <Text style={{fontFamily:'black',fontSize:20 }}>Home</Text>
         </View>
-        {/* <Text numberOfLines={1} style={{fontFamily:'light'}}>{customer[0].address}</Text> */}
+        <Text numberOfLines={1} style={{fontFamily:'light'}}>{customer[0].address}</Text>
         </View>
         
-        {/* <Image
+        <Image
             style={{height:60, width:60, borderRadius:60}}
             source={{uri:customer[0].avatar}}
-        /> */}
+        />
 
         </View>
     )

@@ -81,7 +81,7 @@ const AppNav=()=>{
     return(
         <NavigationContainer>
             <AppFlow.Navigator screenOptions={{headerShown:false}} >
-            {/* <AppFlow.Screen name='Auth' component={MyAuth} /> */}
+            <AppFlow.Screen name='Auth' component={MyAuth} />
             <AppFlow.Screen name='Main' component={MainApp} />
             </AppFlow.Navigator>
         </NavigationContainer>
