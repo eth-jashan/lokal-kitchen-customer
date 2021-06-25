@@ -139,13 +139,21 @@ const LoginScreen=props=>{
                 <Pressable onPress={()=>{props.navigation.navigate('Profile')}} style={{width:Dimensions.get('screen').width*0.95,margin:10,borderWidth:3,borderRadius:20,borderColor:'#DB4437',height:50,justifyContent:'center',alignItems:'center'}} >
                     <View style={{flexDirection:'row'}} >
                         <View style={{marginRight:5}} ><Ionicons name='logo-google' size={25} color='#DB4437' /></View>
+<<<<<<< HEAD
                         <Text style={{fontFamily:'book',fontSize:16,alignSelf:'center'}} >Signup with Google</Text>
+=======
+                        <Text style={{fontFamily:'book',fontSize:16}} >Signup with Google</Text>
+>>>>>>> de7fa9ce9cad3c3d51c869b12abe4d9b0fc883be
                     </View>
                 </Pressable>
                 <Pressable onPress={()=>{props.navigation.navigate('Profile')}} style={{width:Dimensions.get('screen').width*0.95,margin:10,borderWidth:3,borderRadius:20,borderColor:'#4267B2',height:50,justifyContent:'center',alignItems:'center'}} >
                     <View style={{flexDirection:'row'}} >
                         <View style={{marginRight:5}} ><Ionicons name='logo-facebook' size={25} color='#4267B2' /></View>
+<<<<<<< HEAD
                         <Text style={{fontFamily:'book',fontSize:16, alignSelf:'center'}} >Signup with Facebook</Text>
+=======
+                        <Text style={{fontFamily:'book',fontSize:16}} >Signup with Facebook</Text>
+>>>>>>> de7fa9ce9cad3c3d51c869b12abe4d9b0fc883be
                     </View>
                 </Pressable>
             </View>    

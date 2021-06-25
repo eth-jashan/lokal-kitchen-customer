@@ -1,14 +1,18 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+<<<<<<< HEAD
 import { createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 
+=======
+>>>>>>> de7fa9ce9cad3c3d51c869b12abe4d9b0fc883be
 import StartupScreen from '../source/screen/StartupScreen';
 import LoginScreen from '../source/screen/LoginScreen';
 import HomeScreen from '../source/screen/HomeScreen';
 import MapStartupScreen from '../source/screen/MapStartupScreen';
 import ProfileScreen from '../source/screen/ProfileScreen';
 import ProfileCreation from '../source/screen/ProfileCreation';
+<<<<<<< HEAD
 import CartScreen from '../source/screen/CartScreen';
 import { Entypo, Feather  } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
@@ -53,6 +57,8 @@ const BottomNav = () => {
     </Tab.Navigator>
   );
 }
+=======
+>>>>>>> de7fa9ce9cad3c3d51c869b12abe4d9b0fc883be
 
 const AuthStack=createStackNavigator()
 
@@ -71,7 +77,11 @@ const MainStack=createStackNavigator()
 const MainApp=()=>{
     return(
         <MainStack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}} >
+<<<<<<< HEAD
             <MainStack.Screen name='Home' component={BottomNav}  />
+=======
+            <MainStack.Screen name='Home' component={HomeScreen}  />
+>>>>>>> de7fa9ce9cad3c3d51c869b12abe4d9b0fc883be
         </MainStack.Navigator>
     )
 }

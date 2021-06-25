@@ -10,7 +10,6 @@ import {getDistance, getPreciseDistance} from 'geolib';
 const {width, height} = Dimensions.get('window')
 
 const DishList = () => {
-
     const dish=useSelector(x=>x.dish.dish)
     const profile=useSelector(x=>x.profile.profile)
     const dispatch=useDispatch()

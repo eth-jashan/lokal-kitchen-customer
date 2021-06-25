@@ -10,12 +10,21 @@ const HomeHeader = ({}) => {
     const customer=useSelector(x=>x.auth.user)
     const dispatch=useDispatch()
 
+<<<<<<< HEAD
     // useEffect(()=>{
     //     const fetch=async()=>{
     //         await dispatch(fetchCustomer())
     //     }
     //     fetch()
     // },[dispatch])
+=======
+    useEffect(()=>{
+        const fetch=async()=>{
+            await dispatch(fetchCustomer())
+        }
+        fetch()
+    },[dispatch])
+>>>>>>> de7fa9ce9cad3c3d51c869b12abe4d9b0fc883be
 
     return(
         <View style={{width:width, padding:8,flexDirection:'row', justifyContent:'space-between'}}>
