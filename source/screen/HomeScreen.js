@@ -12,24 +12,33 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchCustomer } from '../../store/action/auth'
 import { fetchProfile } from '../../store/action/profile'
 import { fetchDish } from '../../store/action/dish'
+import { ActivityIndicator } from 'react-native-paper'
 
 const HomeScreen=({navigation})=>{
 
-    const dispatch=useDispatch()
-
     const customer=useSelector(x=>x.auth.user)
     const profile=useSelector(x=>x.profile.profile)
-        
-    const startupCalls = async() => {
+    const dispatch=useDispatch()  
+    
+    console.log(customer)
+
+    useEffect(()=>{
+        const startupCalls = async() => {
 
         await dispatch(fetchProfile())
+        await dispatch(fetchCustomer())
         await dispatch(fetchDish())
 
     }
-
-    useEffect(()=>{
         startupCalls()
     },[dispatch])
+    if(customer.length==0){
+        return(
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}} >
+                <ActivityIndicator size='large' color='#08818a' />
+            </View>
+        )
+    }
 
     return(
         <SafeAreaView style={{flex:1}} >

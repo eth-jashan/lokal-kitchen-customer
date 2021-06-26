@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {View,Text,StyleSheet,Dimensions,TouchableOpacity, SafeAreaView} from 'react-native';
 import * as Location from 'expo-location';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 //icons
 import { Feather } from '@expo/vector-icons'; 
@@ -65,7 +65,7 @@ const MapStartupScreen = (props) => {
         setProfilePic(avatar);
         setMethod(method);
     },[foundLocation])
-
+   
     const startMap = async() => {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location.coords);
@@ -97,9 +97,8 @@ const MapStartupScreen = (props) => {
     }
 
     const proceed = async() => {
-        if(Method === 'SignUp')
+        if(Method === 'SignUp' )
         {
-            
             await dispatch(authActions.signUp(number,emailId,customerName,profilePic,location,address,'true'))
             props.navigation.navigate('Main')
         }

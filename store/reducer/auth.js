@@ -1,15 +1,22 @@
 import Customer from "../../model/Customer"
-import { CREATE, FETCH_CUSTOMER, SIGN_UP} from "../action/auth"
+import { CREATE, FETCH_CUSTOMER, Register, SIGN_UP} from "../action/auth"
 
 const initialState={
     user:[],
     userId:null,
     tokenId:null,
+    id:null,
 }
 
 export default (state=initialState,action)=>{
     switch(action.type){
+        case Register:
+            return{
+                ...state,
+                id:action.id
+            }
         case CREATE:
+            console.log(action.userid)
             return{
                 ...state,
                 userId:action.userid,

@@ -4,10 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import {Ionicons} from '@expo/vector-icons'
 import * as FirebaseCore from 'expo-firebase-core';
 import firebase from '../../firebase'
-import { createAccount } from '../../store/action/auth';
+import { createAccount, register } from '../../store/action/auth';
 import { useDispatch } from 'react-redux';
 import { Alert } from 'react-native';
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const LoginScreen=props=>{
@@ -17,7 +18,7 @@ const LoginScreen=props=>{
     const[verificationId,setVerificationId]=useState()
     const recaptchaVerifier = useRef(null);
     const[error,setError] = useState();
-   
+    const[created,setCreated]=useState()
     const dispatch=useDispatch()
 
     // useEffect(() => {
@@ -63,14 +64,30 @@ const LoginScreen=props=>{
             const token = await response.user.getIdToken(true)
             const userId=response.user.uid
             console.log(userId,token)
-            await dispatch(createAccount(userId,token))
-            props.navigation.navigate('Profile',{type:'Phone',pNumber:number})
+            
+            if(response.additionalUserInfo.isNewUser){
+                await dispatch(createAccount(userId,token))
+                await dispatch(register(false,number,userId,token))
+                props.navigation.navigate('Profile',{type:'Phone',pNumber:number})
+            }
+            if(!response.additionalUserInfo.isNewUser){
+                props.navigation.navigate('Main')
+            }
           } catch (err) {
-            Alert.alert('Error','Invalid Code',[{text:'Okay'}])
+            Alert.alert('Error',err.message,[{text:'Okay'}])
           }
         
-    }   
-
+    } 
+    useEffect(()=>{
+        const storage=async()=>{
+        const userData = await AsyncStorage.getItem('userData');
+        const transformedData = JSON.parse(userData);
+        const {token,userId,created,number} = transformedData;
+        setCreated(created)
+        }
+        storage()
+    },[setCreated,created])
+    console.log(created)
     return(
         <SafeAreaView style={{flex:1}} >
         <View style={{flex:1}} >
@@ -139,21 +156,13 @@ const LoginScreen=props=>{
                 <Pressable onPress={()=>{props.navigation.navigate('Profile')}} style={{width:Dimensions.get('screen').width*0.95,margin:10,borderWidth:3,borderRadius:20,borderColor:'#DB4437',height:50,justifyContent:'center',alignItems:'center'}} >
                     <View style={{flexDirection:'row'}} >
                         <View style={{marginRight:5}} ><Ionicons name='logo-google' size={25} color='#DB4437' /></View>
-<<<<<<< HEAD
                         <Text style={{fontFamily:'book',fontSize:16,alignSelf:'center'}} >Signup with Google</Text>
-=======
-                        <Text style={{fontFamily:'book',fontSize:16}} >Signup with Google</Text>
->>>>>>> de7fa9ce9cad3c3d51c869b12abe4d9b0fc883be
                     </View>
                 </Pressable>
                 <Pressable onPress={()=>{props.navigation.navigate('Profile')}} style={{width:Dimensions.get('screen').width*0.95,margin:10,borderWidth:3,borderRadius:20,borderColor:'#4267B2',height:50,justifyContent:'center',alignItems:'center'}} >
                     <View style={{flexDirection:'row'}} >
                         <View style={{marginRight:5}} ><Ionicons name='logo-facebook' size={25} color='#4267B2' /></View>
-<<<<<<< HEAD
                         <Text style={{fontFamily:'book',fontSize:16, alignSelf:'center'}} >Signup with Facebook</Text>
-=======
-                        <Text style={{fontFamily:'book',fontSize:16}} >Signup with Facebook</Text>
->>>>>>> de7fa9ce9cad3c3d51c869b12abe4d9b0fc883be
                     </View>
                 </Pressable>
             </View>    
