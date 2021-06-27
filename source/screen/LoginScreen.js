@@ -39,7 +39,7 @@ const LoginScreen=props=>{
     
     const onSubmit = async() => {
         try{
-            const newNum = '+91'+number
+            const newNum = '+44'+number
             console.log(newNum)
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             const verId=await phoneProvider.verifyPhoneNumber(newNum,recaptchaVerifier.current)

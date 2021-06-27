@@ -14,13 +14,13 @@ import { fetchProfile } from '../../store/action/profile'
 import { fetchDish } from '../../store/action/dish'
 import { ActivityIndicator } from 'react-native-paper'
 
-const HomeScreen=({navigation})=>{
+const HomeScreen=(props)=>{
 
     const customer=useSelector(x=>x.auth.user)
     const profile=useSelector(x=>x.profile.profile)
     const dispatch=useDispatch()  
     
-    console.log(customer)
+  //  console.log(customer)
 
     useEffect(()=>{
         const startupCalls = async() => {
@@ -32,21 +32,23 @@ const HomeScreen=({navigation})=>{
     }
         startupCalls()
     },[dispatch])
-    if(customer.length==0){
-        return(
-            <View style={{flex:1,justifyContent:'center',alignItems:'center'}} >
-                <ActivityIndicator size='large' color='#08818a' />
-            </View>
-        )
-    }
+    // if(customer.length==0){
+    //     return(
+    //         <View style={{flex:1,justifyContent:'center',alignItems:'center'}} >
+    //             <ActivityIndicator size='large' color='#08818a' />
+    //         </View>
+    //     )
+    // }
 
     return(
         <SafeAreaView style={{flex:1}} >
-        <HomeHeader/>
+        <TouchableOpacity onPress={() => props.navigation.navigate('SearchAddress')}>
+            <HomeHeader/>
+        </TouchableOpacity>
         <ScrollView showsVerticalScrollIndicator={false} style={{flex:1}}>
         <View style={{padding:10}}>
         <Text style={{fontFamily:'light', fontSize:30}}>Welcome</Text>
-        <Text style={{fontFamily:'book', fontSize:35}}>{customer[0].name}</Text>
+        <Text style={{fontFamily:'book', fontSize:35}}>Piyush</Text>
         </View>
 
         <OfferCarousel/>

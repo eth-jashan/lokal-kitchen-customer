@@ -10,6 +10,7 @@ import MapStartupScreen from '../source/screen/MapStartupScreen';
 import ProfileScreen from '../source/screen/ProfileScreen';
 import ProfileCreation from '../source/screen/ProfileCreation';
 import CartScreen from '../source/screen/CartScreen';
+import AddressSearch from '../source/screen/AddressSearch';
 import { Entypo, Feather  } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import {View, Text} from 'react-native'
@@ -72,6 +73,7 @@ const MainApp=()=>{
     return(
         <MainStack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}} >
             <MainStack.Screen name='Home' component={BottomNav}  />
+            <MainStack.Screen name='SearchAddress' component={AddressSearch} />
         </MainStack.Navigator>
     )
 }
@@ -81,7 +83,7 @@ const AppNav=()=>{
     return(
         <NavigationContainer>
             <AppFlow.Navigator screenOptions={{headerShown:false}} >
-            <AppFlow.Screen name='Auth' component={MyAuth} />
+            {/* <AppFlow.Screen name='Auth' component={MyAuth} /> */}
             <AppFlow.Screen name='Main' component={MainApp} />
             </AppFlow.Navigator>
         </NavigationContainer>
