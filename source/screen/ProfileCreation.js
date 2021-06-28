@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import {View,Text, Dimensions,FlatList, ScrollView,TextInput,Pressable,Alert} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import SetAvatar from '../components/SetAvatar'
+import { useDispatch } from 'react-redux'
+import { signUp } from '../../store/action/auth'
+import SetAvatar from '../component/SetAvatar'
 
 const ProfileCreation=props=>{
     const{type,pNumber} =  props.route.params;
@@ -26,8 +28,10 @@ const ProfileCreation=props=>{
         setNumber(pNumber)
     },[done])
 
+    const dispatch = useDispatch()
     const checkCredentials = () => {
         if(name.trim().length > 0 && number.trim().length > 0 && avatar){
+            dispatch(signUp(number, email, name, avatar, false, false, true))
             props.navigation.navigate('Map',{phoneNumber:number,email:email,name:name,avatar:avatar,method:'SignUp'})
         }
         else{

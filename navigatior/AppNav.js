@@ -10,10 +10,13 @@ import MapStartupScreen from '../source/screen/MapStartupScreen';
 import ProfileScreen from '../source/screen/ProfileScreen';
 import ProfileCreation from '../source/screen/ProfileCreation';
 import CartScreen from '../source/screen/CartScreen';
-import AddressSearch from '../source/screen/AddressSearch';
 import { Entypo, Feather  } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import {View, Text} from 'react-native'
+import PaymentPage from '../source/screen/PaymentScreen';
+import CheckScreen from '../source/screen/CheckScreen';
+import StartScreen from '../source/screen/StartScreen';
+import AddressSearch from '../source/screen/AddressSearch';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -59,11 +62,13 @@ const AuthStack=createStackNavigator()
 
 const MyAuth=()=>{
     return(
-        <AuthStack.Navigator initialRouteName='Welcome' screenOptions={{headerShown:false}} >
+        <AuthStack.Navigator initialRouteName='Start' screenOptions={{headerShown:false}} >
+            <AuthStack.Screen name='Start' component={StartScreen}/>
             <AuthStack.Screen name='Welcome' component={StartupScreen} />
             <AuthStack.Screen name='Login' component={LoginScreen} />
             <AuthStack.Screen name='Profile' component={ProfileCreation} />
             <AuthStack.Screen name= 'Map' component = {MapStartupScreen} />
+            <AuthStack.Screen name = 'Check' component={CheckScreen}/>
         </AuthStack.Navigator>
     )
 }
@@ -73,7 +78,8 @@ const MainApp=()=>{
     return(
         <MainStack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}} >
             <MainStack.Screen name='Home' component={BottomNav}  />
-            <MainStack.Screen name='SearchAddress' component={AddressSearch} />
+            <MainStack.Screen name='SearchAddress' component={AddressSearch}/>
+            <MainStack.Screen name='Payment' component={PaymentPage} />
         </MainStack.Navigator>
     )
 }
@@ -83,7 +89,7 @@ const AppNav=()=>{
     return(
         <NavigationContainer>
             <AppFlow.Navigator screenOptions={{headerShown:false}} >
-            {/* <AppFlow.Screen name='Auth' component={MyAuth} /> */}
+            <AppFlow.Screen name='Auth' component={MyAuth} />
             <AppFlow.Screen name='Main' component={MainApp} />
             </AppFlow.Navigator>
         </NavigationContainer>

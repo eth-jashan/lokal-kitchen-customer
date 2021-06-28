@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import {Ionicons} from '@expo/vector-icons'
 import * as FirebaseCore from 'expo-firebase-core';
 import firebase from '../../firebase'
-import { createAccount, register } from '../../store/action/auth';
+import { checkuser, createAccount, register } from '../../store/action/auth';
 import { useDispatch } from 'react-redux';
 import { Alert } from 'react-native';
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
@@ -39,7 +39,7 @@ const LoginScreen=props=>{
     
     const onSubmit = async() => {
         try{
-            const newNum = '+44'+number
+            const newNum = '+91'+number
             console.log(newNum)
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             const verId=await phoneProvider.verifyPhoneNumber(newNum,recaptchaVerifier.current)
@@ -64,15 +64,17 @@ const LoginScreen=props=>{
             const token = await response.user.getIdToken(true)
             const userId=response.user.uid
             console.log(userId,token)
-            
-            if(response.additionalUserInfo.isNewUser){
-                await dispatch(createAccount(userId,token))
-                await dispatch(register(false,number,userId,token))
-                props.navigation.navigate('Profile',{type:'Phone',pNumber:number})
-            }
-            if(!response.additionalUserInfo.isNewUser){
-                props.navigation.navigate('Main')
-            }
+            await dispatch(createAccount(userId,token))
+            await dispatch(checkuser(userId))
+            props.navigation.navigate('Check',{userId, token, number})
+            // if(response.additionalUserInfo.isNewUser){
+            //     await dispatch(createAccount(userId,token))
+            //     await dispatch(register(false,number,userId,token))
+            //     props.navigation.navigate('Profile',{type:'Phone',pNumber:number})
+            // }
+            // if(!response.additionalUserInfo.isNewUser){
+            //     props.navigation.navigate('Main')
+            // }
           } catch (err) {
             Alert.alert('Error',err.message,[{text:'Okay'}])
           }

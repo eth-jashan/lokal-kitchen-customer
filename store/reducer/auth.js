@@ -1,11 +1,12 @@
 import Customer from "../../model/Customer"
-import { CREATE, FETCH_CUSTOMER, Register, SIGN_UP} from "../action/auth"
+import { CHECK_USER, CREATE, FETCH_CUSTOMER, Register, SIGN_UP} from "../action/auth"
 
 const initialState={
     user:[],
     userId:null,
     tokenId:null,
     id:null,
+    created:false
 }
 
 export default (state=initialState,action)=>{
@@ -42,6 +43,11 @@ export default (state=initialState,action)=>{
             return{
                 ...state,
                 user:action.data.filter(x=>x.uid==action.uid)
+            }
+        case CHECK_USER:
+            return{
+                ...state,
+                created:action.status
             }
         default:
             return state;

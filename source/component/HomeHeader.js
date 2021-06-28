@@ -6,7 +6,7 @@ import { fetchCustomer } from '../../store/action/auth';
 
 const {width, height} = Dimensions.get('window')
 
-const HomeHeader = () => {
+const HomeHeader = (props) => {
     const customer=useSelector(x=>x.auth.user)
     const dispatch=useDispatch()
 
@@ -20,21 +20,21 @@ const HomeHeader = () => {
     return(
         <View style={{width:width, padding:8,flexDirection:'row', justifyContent:'space-between'}}>
         
-       
-        <View style={{width:'100%',alignSelf:'center'}}>
+        <View style={{width:'70%',alignSelf:'center'}}>
         <View style={{flexDirection:'row'}}>
         <View style={{margin:4}} ><EvilIcons name="location" size={30} color="#0a789f" /></View>
-        <Text style={{fontFamily:'black',fontSize:20 }}>Home</Text>
+        <Text style={{fontFamily:'black',fontSize:20, alignSelf:'center' }}>Home</Text>
         </View>
         {/* <Text numberOfLines={1} style={{fontFamily:'light'}}>{customer[0].address}</Text> */}
-        <Text numberOfLines={1} style={{fontFamily:'light',marginHorizontal:10}}>Panvel</Text>
+        <Text numberOfLines={1} style={{fontFamily:'light',left:14}}>Krishna Changa Naik Marg, Seawoods West, Sector 44A, Seawoods, Navi Mumbai, Maharashtra 400706</Text>
         </View>
     
+
         
-        {/* <Image
-            style={{height:60, width:60, borderRadius:60}}
+        <Image
+            style={{height:45, width:45, borderRadius:60, alignSelf:'center', margin:6}}
             source={{uri:customer[0].avatar}}
-        /> */}
+        />
 
         </View>
     )

@@ -1,16 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import {View,ActivityIndicator} from 'react-native'
 import { useDispatch } from 'react-redux';
 import { createAccount } from '../../store/action/auth';
 
 const StartScreen=props=>{
-    const dispatch = useDispatchtch();
+    const dispatch = useDispatch();
 
     const Authenticate = useCallback( async(userId,token) =>{
         await dispatch(createAccount(userId,token))
         
-        props.navigation.navigate('Main')
+        props.navigation.navigate('Map')
 
     },[dispatch])
     useEffect(()=>{
@@ -22,8 +22,9 @@ const StartScreen=props=>{
         }
         const transformedData = JSON.parse(userData);
         const {token,userId,created,number} = transformedData;
+        console.log(token,userId,created,number)
         if(!created){
-            props.navigation.navigate('Profile',{type:'Phone',pNumber:number})
+            props.navigation.navigate('Profile',{type:'Phone',phoneNumber:number})
         }
         else{
             Authenticate(userId,token)
@@ -37,3 +38,5 @@ const StartScreen=props=>{
         </View>
     )
 }
+
+export default StartScreen

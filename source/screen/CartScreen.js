@@ -1,13 +1,14 @@
 import React from 'react' 
-import {View, Text, Image,FlatList, Dimensions, ScrollView} from 'react-native'
+import {View, Text, Image,FlatList, Dimensions, ScrollView, TouchableOpacity} from 'react-native'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import AddButton from '../component/AddButton'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useSelector } from 'react-redux';
 import MapView from 'react-native-maps'
 import { FontAwesome,AntDesign } from '@expo/vector-icons';
+import { Pressable } from 'react-native';
 
-const CartScreen = () => {
+const CartScreen = ({navigation}) => {
 
     const cartArray = []
     const cartObject = useSelector(x=>x.cart.cartObject)
@@ -28,6 +29,23 @@ const CartScreen = () => {
 
     for(const key in cartObject){
         cartArray.push(new CartModel(key, cartObject[key].name, cartObject[key].price, cartObject[key].category,cartObject[key].catid, cartObject[key].image, cartObject[key].quantity, cartObject[key].mrp))
+    }
+
+    if(cartArray.length === 0){
+
+        return(
+            <SafeAreaView style={{flex:1}}>
+                <View style={{width:'100%', height:'100%', justifyContent:'center'}}>
+                <Image  
+                    source={{uri:'https://i.pinimg.com/originals/b3/aa/49/b3aa496cfe5ec68bda6d0ad56f8fa05d.png'}}
+                    style={{height:Dimensions.get('window').width, width:Dimensions.get('window').width, alignSelf:'center'}}
+                />
+                <TouchableOpacity onPress={()=>navigation.navigate('Home')} style={{justifyContent:'center',width:"80%", padding:16,marginTop:20, borderRadius:16, backgroundColor:'#08818a', alignSelf:'center'}}>
+                    <Text style={{fontSize:18, fontFamily:'book', color:'white', alignSelf:'center'}}>Browse Home Chefs</Text>
+                </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        )
     }
     
     
@@ -141,9 +159,9 @@ const CartScreen = () => {
                 <Text style={{fontSize:16, fontFamily:'book', marginVertical:4, color:'#08818a'}}>Detailed View</Text>
             
             </View>
-            <View style={{width:'50%', padding:10, backgroundColor:'#08818a',justifyContent:'center'}}>
+            <Pressable onPress={()=>navigation.navigate('Payment')} style={{width:'50%', padding:10, backgroundColor:'#08818a',justifyContent:'center'}}>
                 <Text style={{alignSelf:'center', color:'white', fontSize:20,}}>Proceed To Pay</Text>
-            </View>
+            </Pressable>
         </View>
         
         </View>

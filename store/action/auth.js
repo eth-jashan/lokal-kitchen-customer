@@ -5,15 +5,33 @@ export const CREATE='CREATE'
 export const SIGN_UP = 'SIGN_UP';
 export const FETCH_CUSTOMER='FETCH_CUSTOMER'
 export const Register='Register'
+export const CHECK_USER = 'CHECK_USER'
 
 export const createAccount=(uid,token)=>{
     return async (dispatch)=>{
         dispatch({type:CREATE,userid:uid,tokenid:token})        
     }
 }
+export const checkuser = (uid) => {
+
+    return async (dispatch, getState)=>{
+
+        const response = await fetch('https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/user/check.json')
+        const resData = await response.json()
+        const uidList = []
+
+        for(const key in resData){
+            uidList.push(resData[key].uid)
+        }
+        console.log('Checkkkk-------', uidList.includes(uid.toString()))
+        dispatch({type:CHECK_USER, status:uidList.includes(uid.toString())})
+        
+    }
+
+}
 export const register=(created,number,uid,token)=>{
     return async(dispatch)=>{
-        const response = await fetch(`https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/user.json`,{
+        const response = await fetch(`https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/user/profile.json`,{
             method:'POST',
             header:{
                 'Content Type':'application/json'
@@ -35,7 +53,7 @@ export const signUp = (phoneNumber,email,name,avatar,location,address,created) =
         const token = getState().auth.tokenId;
         const userId = getState().auth.userId;
         const id=getState().auth.id
-        const response = await fetch(`https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/user/${id}.json`,{
+        const response = await fetch(`https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/user/profile/${id}.json`,{
             method:'PATCH',
             header:{
                 'Content Type':'application/json'
@@ -51,6 +69,15 @@ export const signUp = (phoneNumber,email,name,avatar,location,address,created) =
                 created:created
             })
         });
+        const response2 = await fetch('https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/user/check.json',{
+            method:'POST',
+            header:{
+                'Content Type':'application/json'
+            },
+            body:JSON.stringify({
+                uid:userId
+            })
+        })
         const resData = await response.json();
         console.log(resData.name);
         
@@ -85,11 +112,11 @@ export const fetchCustomer=()=>{
     return async (dispatch,getState)=>{
         const token = getState().auth.tokenId;
         const userId = getState().auth.userId;
-        const response=await fetch('https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/user.json')
+        const response=await fetch('https://mineral-concord-314020-default-rtdb.asia-southeast1.firebasedatabase.app/user/profile.json')
         const resData=await response.json()
         const list=[]
         for(const key in resData){
-            list.push(new Customer(resData[key].id,
+            list.push(new Customer(key,
                 resData[key].phoneNumber,
                 resData[key].email,
                 resData[key].name,
@@ -99,6 +126,7 @@ export const fetchCustomer=()=>{
                 resData[key].uid,
                 resData[key].created))
         }
+        console.log('list',resData, list.filter(x=>x.uid === userId))
         dispatch({type:FETCH_CUSTOMER,data:list,uid:userId})
     }
 }

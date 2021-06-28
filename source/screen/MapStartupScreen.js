@@ -30,8 +30,8 @@ import GoogleLocationApi from '../api/GoogleLocationApi';
 const{width, height} = Dimensions.get('window')
 
 const MapStartupScreen = (props) => {
-    const{phoneNumber,email,name,avatar,method} =  props.route.params;
-    console.log(phoneNumber)
+    
+    
 
     const [location, setLocation] = useState(null);
     const[address,setAddress] = useState();
@@ -59,11 +59,12 @@ const MapStartupScreen = (props) => {
 
     useEffect(()=>{
         startMap();
-        setNumber(phoneNumber);
-        setEmailId(email);
-        setCustomerName(name);
-        setProfilePic(avatar);
-        setMethod(method);
+        // setNumber(phoneNumber);
+        // setEmailId(email);
+        // setCustomerName(name);
+        // setProfilePic(avatar);
+        // setMethod(method);
+        dispatch(authActions.fetchCustomer())
     },[foundLocation])
    
     const startMap = async() => {
@@ -97,15 +98,11 @@ const MapStartupScreen = (props) => {
     }
 
     const proceed = async() => {
-        if(Method === 'SignUp' )
-        {
-            await dispatch(authActions.signUp(number,emailId,customerName,profilePic,location,address,'true'))
+        
+            
             props.navigation.navigate('Main')
-        }
-        else{
-            //dispatch login
-        }
-    }
+                
+    }   
 
     return(
         <SafeAreaView>
@@ -134,11 +131,11 @@ const MapStartupScreen = (props) => {
                 
                 <View style={{justifyContent:'center',alignItems:'center',width:width*0.6}}>
                     {location?<View style={{flexDirection:'row',marginVertical:Dimensions.get('window').height*0.02}}>
-                    <Feather name="map-pin" size={15} color="black" />
-                    <Text style={{fontSize:12,color:'#8f8f8f',fontFamily:'medium'}}>DELIVERING TO</Text>
+                    
+                    <Text style={{fontSize:18, color:'black',fontFamily:'medium'}}>DELIVERING TO</Text>
                    
                     </View>:null}
-                    <Text style={{fontSize:13,fontFamily:'book'}}>{address}</Text>
+                    <Text style={{fontSize:16,fontFamily:'book',textAlign:'center', color:'#8f8f8f'}}>{address}</Text>
                     {location?<TouchableOpacity  style={styles.button}  onPress={()=>{proceed()}}>
                         <Text style={{fontFamily:'book',fontSize:15,color:'#08818a',textAlign:'center'}} >Proceed</Text>
                     

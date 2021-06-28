@@ -39,9 +39,21 @@ const SearchAddress = () => {
     const[city,setCity] = useState(null);
     const[postal,setPostal] = useState(null);
     const[coordinates,setCoordinates] = useState()
+    const[initial,setInitial] = useState(false);
 
     const[latD,setLatD] = useState();
     const[longD,setLongD] = useState();
+
+    const initialAddressFunc = async() => {
+      let location = await Location.getCurrentPositionAsync({});
+      setLoc(location.coords);
+      setLatD(location.coords.latitude);setLongD( location.coords.longitude);
+      await revereGeoCodeResponse(location.coords.latitude, location.coords.longitude) 
+    }
+
+    useEffect(()=>{
+      initialAddressFunc()
+    },[initial])
 
 
     const onMarkerDragEnd = async(coord) => {
