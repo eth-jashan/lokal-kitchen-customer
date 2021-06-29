@@ -35,7 +35,8 @@ const SearchAddress = (props) => {
 
     const dispatch = useDispatch();
 
-    const[newAddress,setNewAddress] = useState();
+    const[finalLat,setFinalLat] = useState()
+    const[finalLong,setFinalLong] = useState()
 
     const modalizeRef = useRef(null);
     const[checked,setChecked] = useState('first');
@@ -51,8 +52,8 @@ const SearchAddress = (props) => {
     const[latD,setLatD] = useState();
     const[longD,setLongD] = useState();
 
-    const addAddress = async(value,header) => {
-      await dispatch(currentAddressAction.addCurrentAddress(value,header))
+    const addAddress = async(value,header,lat,long) => {
+      await dispatch(currentAddressAction.addCurrentAddress(value,header,lat,long))
       props.onAddress()
     }
 
@@ -84,6 +85,7 @@ const SearchAddress = (props) => {
         try{
             const response = await GoogleLocationApi.get(`geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDsDKH-37DS6ZnGY_oIi7t5YE0oAAZ-V88`)
             const address =  response.data.results[0].formatted_address;
+            console.log(response.data.results[0].geometry.location.lat)
            // setLoc(JSON.stringify( response.data.results[0].geometry.location))
             const loc = JSON.stringify(response.data.results[0].address_components) ;
             
@@ -92,11 +94,15 @@ const SearchAddress = (props) => {
             const city = response.data.results[0].address_components[length-4].long_name
             const postal = response.data.results[0].address_components[length-1].long_name
             const header = response.data.results[0].address_components[1].short_name
+            const finalLat = response.data.results[0].geometry.location.lat
+            const finalLong = response.data.results[0].geometry.location.lng
             
             setAddress(address);
             // setCity(city);
              setPostal(postal);
             setHeader(header);
+            setFinalLat(finalLat);
+            setFinalLong(finalLong);
             
             console.log('*************************',address);
             console.log('*******city******************',loc);
@@ -117,7 +123,7 @@ const SearchAddress = (props) => {
     
         onPress={(data, details) => {
             setIsLocated(false);
-            
+            console.log('yeeeeeeeeeeeeeeeeeeeee',details.geometry.location);
             
            // 'details' is provided when fetchDetails = true
          const loc = JSON.stringify(details.address_components);
@@ -128,7 +134,7 @@ const SearchAddress = (props) => {
          // console.log(details)
          //console.log(loc)
         // console.log('what to dispatchch',details.address_components[1].short_name)
-         addAddress(details.formatted_address,details.address_components[1].short_name);
+         addAddress(details.formatted_address,details.address_components[1].short_name,details.geometry.location.lat,details.geometry.location.lng);
         }}
         query={{
                key: 'AIzaSyDsDKH-37DS6ZnGY_oIi7t5YE0oAAZ-V88',
@@ -221,7 +227,7 @@ const SearchAddress = (props) => {
                        placeholder = 'Save This Location As'
                        style={{ fontFamily: 'medium',fontSize:16,backgroundColor:'transparent' , width: Dimensions.get('screen').width*0.65,marginHorizontal:15 }}
                        />:null} */}
-        {address?<TouchableOpacity onPress = {() =>{addAddress(address,header)}}
+        {address?<TouchableOpacity onPress = {() =>{addAddress(address,header,finalLat,finalLong)}}
                     style={{width:'70%', backgroundColor:'#08818a', padding:10, alignSelf:'center', marginVertical:10, borderRadius:4}}>
                             <Text style={{fontSize:14, fontFamily:'book', color:'white', textAlign:'center'}}>Confirm</Text>
                         </TouchableOpacity>:null}

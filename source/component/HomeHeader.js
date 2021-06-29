@@ -10,6 +10,8 @@ const HomeHeader = (props) => {
     const customer=useSelector(x=>x.auth.user)
     const currentAddress = useSelector(x=>x.address.currentAddress)
     const header = useSelector(x=>x.address.header)
+    const lat = useSelector(x=>x.address.lat)
+    const long = useSelector(x=>x.address.long)
     const dispatch=useDispatch()
 
     useEffect(()=>{

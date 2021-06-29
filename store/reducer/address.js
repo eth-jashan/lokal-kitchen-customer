@@ -2,7 +2,9 @@ import { ADD_CURRENT_ADDRESS } from "../action/address"
 
 const initialState = {
     currentAddress:null,
-    header:null
+    header:null,
+    lat:null,
+    long:null
 }
 
 export default (state = initialState,action) => {
@@ -11,7 +13,9 @@ export default (state = initialState,action) => {
             return{
                 ...state,
                 currentAddress:action.currentAddress,
-                header:action.header
+                header:action.header,
+                lat:action.lat,
+                long:action.long
             }
         default:
             return state

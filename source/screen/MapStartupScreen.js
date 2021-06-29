@@ -38,6 +38,9 @@ const MapStartupScreen = (props) => {
     const[address,setAddress] = useState();
     const[foundLocation,setFoundLocation] = useState(false);
 
+    const[finalLat,setFinalLat] = useState()
+    const[finalLong,setFinalLong] = useState()
+
     const[number,setNumber] = useState('');
     const[emailId,setEmailId] = useState('');
     const[customerName,setCustomerName] = useState('');
@@ -86,6 +89,8 @@ const MapStartupScreen = (props) => {
             const header = response.data.results[0].address_components[1].short_name
            // setLoc(JSON.stringify( response.data.results[0].geometry.location))
             const loc = JSON.stringify(response.data.results[0].address_components) ;
+            const finalLat = response.data.results[0].geometry.location.lat
+            const finalLong = response.data.results[0].geometry.location.lng
             
             const array = response.data.results[0].address_components;
             const length = array.length;
@@ -94,7 +99,8 @@ const MapStartupScreen = (props) => {
             
             setAddress(address);
             setHeader(header);
-            //console.log(address)
+            setFinalLat(finalLat);
+            setFinalLong(finalLong);
         }
         catch(e){
             console.log('error!', e)
@@ -103,7 +109,7 @@ const MapStartupScreen = (props) => {
 
     const proceed = async() => {
         
-            await dispatch(currentAddressActions.addCurrentAddress(address,header))
+            await dispatch(currentAddressActions.addCurrentAddress(address,header,finalLat,finalLong))
             props.navigation.navigate('Main')
                 
     }   
