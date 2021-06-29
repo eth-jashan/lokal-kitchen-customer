@@ -25,10 +25,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import GoogleLocationApi from '../api/GoogleLocationApi';
 import { Button } from 'react-native-paper';
 
+//actions
+import * as currentAddressAction from '../../store/action/address';
+import { useDispatch } from 'react-redux';
+
 const {width, height} = Dimensions.get('window')
 
-const SearchAddress = () => {
-    const[landMark,setLandmark] = useState();
+const SearchAddress = (props) => {
+
+    const dispatch = useDispatch();
+
     const[newAddress,setNewAddress] = useState();
 
     const modalizeRef = useRef(null);
@@ -40,20 +46,24 @@ const SearchAddress = () => {
     const[postal,setPostal] = useState(null);
     const[coordinates,setCoordinates] = useState()
     const[initial,setInitial] = useState(false);
+    const[header,setHeader] = useState();
 
     const[latD,setLatD] = useState();
     const[longD,setLongD] = useState();
 
-    const initialAddressFunc = async() => {
-      let location = await Location.getCurrentPositionAsync({});
-      setLoc(location.coords);
-      setLatD(location.coords.latitude);setLongD( location.coords.longitude);
-      await revereGeoCodeResponse(location.coords.latitude, location.coords.longitude) 
+    const addAddress = async(value,header) => {
+      await dispatch(currentAddressAction.addCurrentAddress(value,header))
+      props.onAddress()
     }
 
-    useEffect(()=>{
-      initialAddressFunc()
-    },[initial])
+     const initialAddressFunc = async() => {
+       let location = await Location.getCurrentPositionAsync({});
+       setLatD(location.coords.latitude);setLongD( location.coords.longitude);
+     }
+
+     useEffect(()=>{
+       initialAddressFunc()
+     },[initial])
 
 
     const onMarkerDragEnd = async(coord) => {
@@ -73,7 +83,6 @@ const SearchAddress = () => {
     const revereGeoCodeResponse = async(latitude,longitude) =>{
         try{
             const response = await GoogleLocationApi.get(`geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDsDKH-37DS6ZnGY_oIi7t5YE0oAAZ-V88`)
-           // console.log(response.data);
             const address =  response.data.results[0].formatted_address;
            // setLoc(JSON.stringify( response.data.results[0].geometry.location))
             const loc = JSON.stringify(response.data.results[0].address_components) ;
@@ -82,10 +91,12 @@ const SearchAddress = () => {
             const length = array.length;
             const city = response.data.results[0].address_components[length-4].long_name
             const postal = response.data.results[0].address_components[length-1].long_name
+            const header = response.data.results[0].address_components[1].short_name
             
             setAddress(address);
-            setCity(city);
-            setPostal(postal);
+            // setCity(city);
+             setPostal(postal);
+            setHeader(header);
             
             console.log('*************************',address);
             console.log('*******city******************',loc);
@@ -96,7 +107,7 @@ const SearchAddress = () => {
     }
 
     return(
-        <SafeAreaView style={{width:'100%',height:'100%',marginTop:35}}>
+        <SafeAreaView style={{width:'100%',height:'100%',marginTop:height*0.07}}>
             <ScrollView keyboardShouldPersistTaps={true}>
                 <Text style={{fontSize:12,marginHorizontal:21,color:'#08818a',fontFamily:'light'}}>SET DELIVERY LOCATION</Text>
             <GooglePlacesAutocomplete
@@ -105,16 +116,19 @@ const SearchAddress = () => {
          styles={Gstyles}
     
         onPress={(data, details) => {
-            setAddress('');
             setIsLocated(false);
+            
             
            // 'details' is provided when fetchDetails = true
          const loc = JSON.stringify(details.address_components);
          const address = details.formatted_address;
          setLoc(loc);
+         
          setAddress(address);
          // console.log(details)
          //console.log(loc)
+        // console.log('what to dispatchch',details.address_components[1].short_name)
+         addAddress(details.formatted_address,details.address_components[1].short_name);
         }}
         query={{
                key: 'AIzaSyDsDKH-37DS6ZnGY_oIi7t5YE0oAAZ-V88',
@@ -122,7 +136,7 @@ const SearchAddress = () => {
         }}
        />
        <TouchableOpacity onPress={onOpen}>
-       <View style={{alignItems:'baseline',marginHorizontal:21,marginVertical:10,flexDirection:'row'}}>
+       <View style={{alignItems:'center',marginHorizontal:21,marginVertical:15,flexDirection:'row'}}>
            
            <MaterialCommunityIcons name="crosshairs-gps" size={27} color="#08818a" />
            
@@ -140,7 +154,7 @@ const SearchAddress = () => {
             
        <Modalize ref={modalizeRef}>
        {loc?<View>
-        <Pressable  style={{width:width*0.98, height:height/2.2, alignSelf:'center',marginVertical:2.7}}>
+        <Pressable  style={{width:width*0.98, height:height/2.1, alignSelf:'center',marginVertical:2.7}}>
                 <MapView
                     provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                    // onRegionChangeComplete={mapHandler}
@@ -165,7 +179,7 @@ const SearchAddress = () => {
         
         <View style={{marginVertical:5,flexDirection:'row',alignItems:'center',width:width*0.55}}>
         <EvilIcons  name="location" size={40} color="#0a789f" />
-        {address?<Text style={{width:'90%',fontSize:20,fontFamily:'bold',color:'black'}} numberOfLines={2}>{postal}</Text>:<DotIndicator  size={10} color='#cccccc'/>}
+        {address?<Text style={{width:'90%',fontSize:20,fontFamily:'bold',color:'black'}} numberOfLines={2}>{header}</Text>:<DotIndicator  size={10} color='#cccccc'/>}
 
         {address?<TouchableOpacity onPress={()=>{modalizeRef.current?.close()}} style={{width:'60%', backgroundColor:'#949494', padding:5, alignSelf:'center', marginVertical:5, borderRadius:4}}>
                             <Text style={{fontSize:14, fontFamily:'book', color:'white', textAlign:'center'}}>Change</Text>
@@ -175,7 +189,7 @@ const SearchAddress = () => {
         {address?<Text style={{width:'90%',padding:7,fontFamily:'medium'}} numberOfLines={3}>{address}</Text>:<DotIndicator  size={10} color='#08818a'/>}
         
         </View>
-        {address?<View style={{flexDirection:'row',alignItems:'center',marginHorizontal:21}}>
+        {/* {address?<View style={{flexDirection:'row',alignItems:'center',marginHorizontal:21}}>
         
         <RadioButton
         value="first"
@@ -199,21 +213,16 @@ const SearchAddress = () => {
       />
       <Text style={{fontSize:14, fontFamily:'book', color:'black', textAlign:'center'}}>Other</Text>
       
-        </View>:null}
-       {checked === 'third'?
+        </View>:null} */}
+       {/* {checked === 'third'?
                        <TextInput
                        value={newAddress}
                        onChangeText={setNewAddress}
                        placeholder = 'Save This Location As'
                        style={{ fontFamily: 'medium',fontSize:16,backgroundColor:'transparent' , width: Dimensions.get('screen').width*0.65,marginHorizontal:15 }}
-                       />:null}
-                {address?<TextInput
-                       value={landMark}
-                       onChangeText={setLandmark}
-                       placeholder = 'Enter LandMark'
-                       style={{ fontFamily: 'medium',fontSize:16,backgroundColor:'transparent' , width: Dimensions.get('screen').width*0.65,marginHorizontal:15 }}
-                       />:null}
-        {address?<TouchableOpacity style={{width:'70%', backgroundColor:'#08818a', padding:10, alignSelf:'center', marginVertical:10, borderRadius:4}}>
+                       />:null} */}
+        {address?<TouchableOpacity onPress = {() =>{addAddress(address,header)}}
+                    style={{width:'70%', backgroundColor:'#08818a', padding:10, alignSelf:'center', marginVertical:10, borderRadius:4}}>
                             <Text style={{fontSize:14, fontFamily:'book', color:'white', textAlign:'center'}}>Confirm</Text>
                         </TouchableOpacity>:null}
            </View>:null}

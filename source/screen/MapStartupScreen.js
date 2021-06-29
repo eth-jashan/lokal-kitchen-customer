@@ -9,6 +9,7 @@ import { Feather } from '@expo/vector-icons';
 
 //actions
 import * as authActions from '../../store/action/auth';
+import * as currentAddressActions from '../../store/action/address';
 
 import {
     BallIndicator,
@@ -42,6 +43,7 @@ const MapStartupScreen = (props) => {
     const[customerName,setCustomerName] = useState('');
     const[profilePic,setProfilePic] = useState('');
     const[Method,setMethod] = useState('');
+    const[header,setHeader] = useState();
 
     const dispatch = useDispatch();
 
@@ -81,6 +83,7 @@ const MapStartupScreen = (props) => {
             const response = await GoogleLocationApi.get(`geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDsDKH-37DS6ZnGY_oIi7t5YE0oAAZ-V88`)
            // console.log(response.data);
             const address =  response.data.results[0].formatted_address;
+            const header = response.data.results[0].address_components[1].short_name
            // setLoc(JSON.stringify( response.data.results[0].geometry.location))
             const loc = JSON.stringify(response.data.results[0].address_components) ;
             
@@ -90,6 +93,7 @@ const MapStartupScreen = (props) => {
             // const postal = response.data.results[0].address_components[length-1].long_name
             
             setAddress(address);
+            setHeader(header);
             //console.log(address)
         }
         catch(e){
@@ -99,7 +103,7 @@ const MapStartupScreen = (props) => {
 
     const proceed = async() => {
         
-            
+            await dispatch(currentAddressActions.addCurrentAddress(address,header))
             props.navigation.navigate('Main')
                 
     }   

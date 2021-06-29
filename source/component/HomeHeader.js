@@ -8,6 +8,8 @@ const {width, height} = Dimensions.get('window')
 
 const HomeHeader = (props) => {
     const customer=useSelector(x=>x.auth.user)
+    const currentAddress = useSelector(x=>x.address.currentAddress)
+    const header = useSelector(x=>x.address.header)
     const dispatch=useDispatch()
 
     useEffect(()=>{
@@ -23,10 +25,13 @@ const HomeHeader = (props) => {
         <View style={{width:'70%',alignSelf:'center'}}>
         <View style={{flexDirection:'row'}}>
         <View style={{margin:4}} ><EvilIcons name="location" size={30} color="#0a789f" /></View>
-        <Text style={{fontFamily:'black',fontSize:20, alignSelf:'center' }}>Home</Text>
+        {header?<Text style={{fontFamily:'black',fontSize:20, alignSelf:'center' }}>{header}</Text>
+        :<Text>loading</Text>}
         </View>
         {/* <Text numberOfLines={1} style={{fontFamily:'light'}}>{customer[0].address}</Text> */}
-        <Text numberOfLines={1} style={{fontFamily:'light',left:14}}>Krishna Changa Naik Marg, Seawoods West, Sector 44A, Seawoods, Navi Mumbai, Maharashtra 400706</Text>
+        {currentAddress?<Text numberOfLines={1} style={{fontFamily:'light',left:14}}>{currentAddress}</Text>
+        :
+        <Text>loading</Text>}
         </View>
     
 
