@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {Dimensions, FlatList,  Image, View, Text, ScrollView,TouchableOpacity,Pressable} from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,12 +7,19 @@ import { fetchProfile } from '../../store/action/profile';
 import AddButton from './AddButton';
 import {getDistance, getPreciseDistance} from 'geolib';
 
+
 const {width, height} = Dimensions.get('window')
 
-const DishList = () => {
+const DishList = ({onOpen}) => {
+
+    
+    
     const dish=useSelector(x=>x.dish.dish)
     const profile=useSelector(x=>x.profile.profile)
     const dispatch=useDispatch()
+    const cusLat = useSelector(x=>x.address.lat)
+    const cusLong = useSelector(x=>x.address.long)
+    
     useEffect(()=>{
         const fetch=async()=>{
             await dispatch(fetchDish())
@@ -22,7 +29,7 @@ const DishList = () => {
     },[dispatch])
     const calculateDistance = (lat, long) => {
         var dis = getDistance(
-          {latitude: 19.049370, longitude: 73.020462},
+          {latitude: cusLat, longitude: cusLong},
           {latitude: lat, longitude: long},
         );
         const kmDis = dis/1000
@@ -51,12 +58,14 @@ const DishList = () => {
                     console.log("dish", distace)
                     return(
                     <View style={{marginVertical:8, alignSelf:'center'}}>
+                        <TouchableOpacity onPress={()=>onOpen(item)}>
                         <View style={{width:width*0.9, height:width*0.9/2, alignSelf:'center'}}>
                         <Image
                             style={{height:'100%', width:'100%', borderRadius:10}}
                             source={{uri:item.imguri}}
                         />
                         </View>
+                        </TouchableOpacity>
                         <View style={{alignSelf:'center', width:width*0.9, marginVertical:6, flexDirection:'row', justifyContent:'space-between'}}>
                             <View style={{flexDirection:'row'}}>
                                 <Image
@@ -117,6 +126,10 @@ const DishList = () => {
                     </View>)
                 }}
             />
+
+            
+
+
         </View>
     )
 

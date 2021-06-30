@@ -146,10 +146,10 @@ const MapStartupScreen = (props) => {
                    
                     </View>:null}
                     <Text style={{fontSize:16,fontFamily:'book',textAlign:'center', color:'#8f8f8f'}}>{address}</Text>
-                    {location?<TouchableOpacity  style={styles.button}  onPress={()=>{proceed()}}>
+                    {address?<TouchableOpacity  style={styles.button}  onPress={()=>{proceed()}}>
                         <Text style={{fontFamily:'book',fontSize:15,color:'#08818a',textAlign:'center'}} >Proceed</Text>
                     
-                     </TouchableOpacity>:null}
+                     </TouchableOpacity>:<DotIndicator size={10} color='#08818a' />}
                     
                    
                 </View>

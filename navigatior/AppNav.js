@@ -17,6 +17,7 @@ import PaymentPage from '../source/screen/PaymentScreen';
 import CheckScreen from '../source/screen/CheckScreen';
 import StartScreen from '../source/screen/StartScreen';
 import AddressSearch from '../source/screen/AddressSearch';
+import AddAddress from '../source/component/AddAddress';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -42,7 +43,7 @@ const BottomNav = () => {
             name="Home" 
             component={HomeScreen} />
       <Tab.Screen options={{
-              tabBarLabel: 'Home',
+              tabBarLabel: 'Cart',
               tabBarIcon: ({ color }) => (
                 count>0?<View>
                 <View style={{elevation:4, height:16, width:16, backgroundColor:'red', borderRadius:10, left:20, bottom:4, justifyContent:'center'}}>
@@ -79,6 +80,7 @@ const MainApp=()=>{
         <MainStack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}} >
             <MainStack.Screen name='Home' component={BottomNav}  />
             <MainStack.Screen name='SearchAddress' component={AddressSearch}/>
+            <MainStack.Screen name='AddAddress' component={AddAddress}/>
             <MainStack.Screen name='Payment' component={PaymentPage} />
         </MainStack.Navigator>
     )

@@ -6,10 +6,13 @@ import {getDistance, getPreciseDistance} from 'geolib';
 
 export const fetchDish=()=>{
     return async (dispatch,getState)=>{
-
+        
+        const cusLat = getState().address.lat
+        const cusLong = getState().address.long
+        console.log("LATLONG ========>", cusLat, cusLong)
         const calculateDistance = (lat, long) => {
             var dis = getDistance(
-              {latitude: 19.049370, longitude: 73.020462},
+              {latitude: cusLat, longitude: cusLong},
               {latitude: lat, longitude: long},
             );
             const kmDis = dis/1000
@@ -21,7 +24,7 @@ export const fetchDish=()=>{
         const list=[]
         console.log("Dish List", resData)
         for(const key in resData){
-            if(parseInt(calculateDistance(resData[key].lat, resData[key].long))<15){
+            if(parseInt(calculateDistance(resData[key].lat, resData[key].long))<1000){
             list.push(new Dish(key,
                 resData[key].name,
                 resData[key].description,

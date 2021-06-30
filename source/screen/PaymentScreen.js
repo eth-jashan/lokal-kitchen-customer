@@ -2,15 +2,24 @@ import React, { useState } from 'react'
 import {View, Text, Image,Dimensions, ScrollView, TouchableOpacity} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView from 'react-native-maps'
+import {PROVIDER_GOOGLE, Marker,Polyline} from 'react-native-maps'
 import { AntDesign } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
+
+const {width, height} = Dimensions.get('window')
 
 const PaymentPage = () => {
     
     const cartArray = []
     const cartObject = useSelector(x=>x.cart.cartObject)
     const cartAmount = useSelector(x=>x.cart.cartAmount)
+    const currentAddress = useSelector(x=>x.address.currentAddress)
+    const header = useSelector(x=>x.address.header)
+    const selectedAddress = useSelector(x=>x.address.selected)
+    const lat = useSelector(x=>x.address.lat)
+    const long = useSelector(x=>x.address.long)
     const [payment, setPayment] = useState()
+    
     class CartModel {
         constructor(id, name, price,  category, catid, image, quantity, mrp){
             this.id = id;
@@ -37,20 +46,35 @@ const PaymentPage = () => {
             </View>
 
             <View style={{marginTop:16, width:'100%', backgroundColor:'white', padding:8, flexDirection:'row', justifyContent:'space-between'}}>
-            
-            <View style={{flexDirection:'row',}}>
-            <MapView
-                zoomControlEnabled={false}
-                style={{height:60, width:60, borderRadius:20}}
-            />
-            <View>
-            <View style={{marginHorizontal:6, alignSelf:'center'}}>
-                <Text style={{fontSize:16, fontFamily:'medium', }}>Delivery to Home</Text> 
-                <Text style={{fontSize:14, fontFamily:'book', marginVertical:4, color:'gray'}}>Andheri</Text>
-            </View>
-            </View>
-            </View>
-            <Text style={{fontSize:16, fontFamily:'medium',color:'#f8a73b',  }}>Change</Text>
+            <View style={{flexDirection:'row',width:width}}>
+                            <MapView
+                                zoomControlEnabled={false}
+                                region={{
+                                    latitude: selectedAddress[0].SA.lat,
+                                    longitude: selectedAddress[0].SA.long,
+                                    latitudeDelta: 0.0012,
+                                    longitudeDelta: 0.0021,
+                                }}
+                                style={{height:60, width:60, borderRadius:20}}
+                            >
+                                <Marker
+                                 draggable={false}
+                                 image={require('../../assets/marker.png')}
+                                
+                                coordinate={{latitude: selectedAddress[0].SA.lat, longitude: selectedAddress[0].SA.long}}
+                                 />
+                            </MapView>
+                            <View>
+                            <View style={{marginHorizontal:6,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+                                <Text style={{fontSize:16, fontFamily:'medium',alignSelf:'flex-start' }}>Deliver to {selectedAddress[0].SA.addressType}</Text>     
+                            </View>
+                                <View style={{marginHorizontal:6,alignItems:'flex-start',width:width*0.7}}>
+                                <Text style={{fontSize:14, fontFamily:'book', marginVertical:4, color:'gray'}}>{selectedAddress[0].SA.houseAddress}</Text>
+                                </View>
+                               
+                            
+                            </View>
+                            </View>
             </View>   
 
             <View style={{width:'90%', borderWidth:0.7, borderColor:'#f5f7f9', alignSelf:'center', marginVertical:16}}/>

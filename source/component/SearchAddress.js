@@ -1,5 +1,5 @@
 import React, { useEffect, useState,useRef } from 'react'
-import {View,TouchableOpacity,StyleSheet,Text,SafeAreaView,Dimensions,ScrollView, Pressable,TextInput} from 'react-native';
+import {View,TouchableOpacity,StyleSheet,Text,SafeAreaView,Dimensions,ScrollView, Pressable,FlatList} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import * as Location from 'expo-location';
 import MapView, {PROVIDER_GOOGLE, Marker,Polyline} from 'react-native-maps'
@@ -20,6 +20,7 @@ import {
 
 //icons
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons'; 
 
 //api
 import GoogleLocationApi from '../api/GoogleLocationApi';
@@ -27,11 +28,13 @@ import { Button } from 'react-native-paper';
 
 //actions
 import * as currentAddressAction from '../../store/action/address';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const {width, height} = Dimensions.get('window')
 
 const SearchAddress = (props) => {
+
+  const savedAddress = useSelector(x=>x.address.noAddress)
 
     const dispatch = useDispatch();
 
@@ -51,11 +54,21 @@ const SearchAddress = (props) => {
 
     const[latD,setLatD] = useState();
     const[longD,setLongD] = useState();
+    const[isLoading,setIsLoading] = useState(false);
 
     const addAddress = async(value,header,lat,long) => {
       await dispatch(currentAddressAction.addCurrentAddress(value,header,lat,long))
       props.onAddress()
     }
+
+    useEffect(()=>{
+      const startupCalls = async() => {
+        setIsLoading(true);
+          await dispatch(currentAddressAction.fetchAddress())
+          setIsLoading(false);
+  }
+      startupCalls()
+  },[dispatch])
 
      const initialAddressFunc = async() => {
        let location = await Location.getCurrentPositionAsync({});
@@ -85,8 +98,6 @@ const SearchAddress = (props) => {
         try{
             const response = await GoogleLocationApi.get(`geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDsDKH-37DS6ZnGY_oIi7t5YE0oAAZ-V88`)
             const address =  response.data.results[0].formatted_address;
-            console.log(response.data.results[0].geometry.location.lat)
-           // setLoc(JSON.stringify( response.data.results[0].geometry.location))
             const loc = JSON.stringify(response.data.results[0].address_components) ;
             
             const array = response.data.results[0].address_components;
@@ -104,8 +115,6 @@ const SearchAddress = (props) => {
             setFinalLat(finalLat);
             setFinalLong(finalLong);
             
-            console.log('*************************',address);
-            console.log('*******city******************',loc);
         }
         catch(e){
             console.log('error!', e)
@@ -123,7 +132,6 @@ const SearchAddress = (props) => {
     
         onPress={(data, details) => {
             setIsLocated(false);
-            console.log('yeeeeeeeeeeeeeeeeeeeee',details.geometry.location);
             
            // 'details' is provided when fetchDetails = true
          const loc = JSON.stringify(details.address_components);
@@ -131,9 +139,6 @@ const SearchAddress = (props) => {
          setLoc(loc);
          
          setAddress(address);
-         // console.log(details)
-         //console.log(loc)
-        // console.log('what to dispatchch',details.address_components[1].short_name)
          addAddress(details.formatted_address,details.address_components[1].short_name,details.geometry.location.lat,details.geometry.location.lng);
         }}
         query={{
@@ -155,8 +160,39 @@ const SearchAddress = (props) => {
        </View>
        </TouchableOpacity>
 
+       {savedAddress.length>0 && !isLoading?<View style={{width:width,marginTop:width*0.5}}>
+        <View style={{justifyContent:'center',height:height*0.06,width:width,backgroundColor:'rgba(165,185,210,0.5)',borderTopLeftRadius:10,borderTopRightRadius:10}}>
+                    <Text style={{fontFamily:'medium',fontSize:15,marginHorizontal:15}} >Saved Locations</Text>
+                </View>
+                <ScrollView scrollEnabled={true}>
+                    <FlatList style={{flex:1}} data={savedAddress}
+                        keyExtractor = {x=>x.id}
+                        scrollEnabled = {true}
+                        renderItem={({item}) =>{
+                            return(
+                                <TouchableOpacity onPress={()=>{addAddress(item.houseAddress,item.addressType,item.lat,item.long)
+                                                                }}>
+                                        <View style={{flexDirection:'row',padding:20,borderWidth:0.5,borderColor:'#cccccc'}}>
+                                    <MaterialCommunityIcons name="map-marker-outline" size={30} color="#2e2e2e" />
+                                    <View style={{width:width*0.85,marginHorizontal:10}}>
+                                        <Text style={{fontFamily:'medium',color:'#08818a'}}>{item.addressType}</Text>
+                                        <Text style={{fontFamily:'light',width:'90%'}}>{item.houseAddress}</Text>
+                                    </View>
+                                       
+                                </View>
+                                </TouchableOpacity>
+
+                                
+                            )
+                        }}/>
+                </ScrollView>
+                
+            </View>:isLoading?<DotIndicator style={{marginTop:50}} size={10} color='rgba(165,185,210,0.5)'/>:null}
+
 
             </ScrollView>
+  
+
             
        <Modalize ref={modalizeRef}>
        {loc?<View>
@@ -175,6 +211,7 @@ const SearchAddress = (props) => {
                     >
         <Marker
         draggable={true}
+        image={require('../../assets/marker.png')}
         onDragEnd={(e) => onMarkerDragEnd(e.nativeEvent.coordinate)}
           coordinate={{latitude: latD, longitude: longD}}
         />        
@@ -195,44 +232,14 @@ const SearchAddress = (props) => {
         {address?<Text style={{width:'90%',padding:7,fontFamily:'medium'}} numberOfLines={3}>{address}</Text>:<DotIndicator  size={10} color='#08818a'/>}
         
         </View>
-        {/* {address?<View style={{flexDirection:'row',alignItems:'center',marginHorizontal:21}}>
-        
-        <RadioButton
-        value="first"
-        status={ checked === 'first' ? 'checked' : 'unchecked' }
-        onPress={() => setChecked('first')}
-      />
-        <Text style={{fontSize:14, fontFamily:'book', color:'black', textAlign:'center'}}>Home</Text>
-        
-        
-            <RadioButton
-        value="second"
-        status={ checked === 'second' ? 'checked' : 'unchecked' }
-        onPress={() => setChecked('second')}
-      />
-      <Text style={{fontSize:14, fontFamily:'book', color:'black', textAlign:'center'}}>Office</Text>
-      
-      <RadioButton
-        value="third"
-        status={ checked === 'third' ? 'checked' : 'unchecked' }
-        onPress={() => setChecked('third')}
-      />
-      <Text style={{fontSize:14, fontFamily:'book', color:'black', textAlign:'center'}}>Other</Text>
-      
-        </View>:null} */}
-       {/* {checked === 'third'?
-                       <TextInput
-                       value={newAddress}
-                       onChangeText={setNewAddress}
-                       placeholder = 'Save This Location As'
-                       style={{ fontFamily: 'medium',fontSize:16,backgroundColor:'transparent' , width: Dimensions.get('screen').width*0.65,marginHorizontal:15 }}
-                       />:null} */}
+
         {address?<TouchableOpacity onPress = {() =>{addAddress(address,header,finalLat,finalLong)}}
                     style={{width:'70%', backgroundColor:'#08818a', padding:10, alignSelf:'center', marginVertical:10, borderRadius:4}}>
                             <Text style={{fontSize:14, fontFamily:'book', color:'white', textAlign:'center'}}>Confirm</Text>
                         </TouchableOpacity>:null}
            </View>:null}
        </Modalize>
+    
         </SafeAreaView>
     )
 
